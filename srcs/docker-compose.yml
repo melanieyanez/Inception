@@ -1,23 +1,18 @@
-version: '3'
+version: '3.9'
 
 services:
   mariadb:
-    build:
-      context: ./requirements/mariadb
+    container_name: mariadb
+    build: 
+      context: ./requirements/mariadb/
       dockerfile: Dockerfile
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD} # Défini dans .env
-      MYSQL_DATABASE: ${MYSQL_DATABASE}         # Défini dans .env
-      MYSQL_USER: ${MYSQL_USER}                 # Défini dans .env
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}         # Défini dans .env
+    ports:
+      - "3306:3306"
+    env_file: .env
     volumes:
-      - db_data:/var/lib/mysql                  # Volume pour persistance des données
-    networks:
-      - inception_network
-    restart: always
+      - db_data:/var/lib/mysql
+    restart: unless-stopped
 
 volumes:
   db_data:
-
-networks:
-  inception_network:
+    driver: local

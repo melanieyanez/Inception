@@ -1,21 +1,16 @@
-# Utiliser Alpine ou Debian comme base
 FROM debian:bullseye
 
-# Installer MariaDB
-RUN apt-get update && apt-get install -y mariadb-server
+RUN apt update -y && apt upgrade -y
+RUN apt install -y mariadb-server mariadb-client
 
-# Créer les répertoires nécessaires et définir les permissions
-RUN mkdir -p /var/lib/mysql && \
-    chown -R mysql:mysql /var/lib/mysql
+RUN mkdir -p /run/mysqld /var/lib/mysql
+RUN chown -R mysql:mysql /run/mysqld /var/lib/mysql
 
-# Copier les fichiers de configuration (si nécessaires)
-COPY conf/my.cnf /etc/mysql/my.cnf
+COPY conf/50-server.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
 
-# Ajouter un script d'initialisation (facultatif)
-COPY tools/init.sql /docker-entrypoint-initdb.d/
+COPY tools/init_mdb.sh /usr/local/init_mdb.sh
+RUN chmod +x /usr/local/init_mdb.sh
 
-# Exposer le port pour MariaDB
 EXPOSE 3306
 
-# Commande pour démarrer MariaDB
-CMD ["mysqld"]
+ENTRYPOINT [ "sh", "/usr/local/init_mdb.sh" ]
