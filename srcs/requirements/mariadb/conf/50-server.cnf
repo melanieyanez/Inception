@@ -4,8 +4,8 @@
 
 #Server configuration
 user                    = mysql
-socket					= /run/mysqld/mysqld.sock
-port					= 3306
+socket                  = /run/mysqld/mysqld.sock
+port                    = 3306
 pid-file                = /run/mysqld/mysqld.pid
 basedir                 = /usr
 datadir                 = /var/lib/mysql
@@ -15,16 +15,15 @@ lc-messages             = en_US
 skip-external-locking
 
 #Networking
-bind-address 			= 0.0.0.0
+bind-address            = 0.0.0.0
 
 #Logging
-log_error 				= /var/log/mysql/error.log
+log_error               = /var/log/mysql/error.log
 expire_logs_days        = 10
 
 #Charset
-character-set-server  	= utf8mb4
-collation-server      	= utf8mb4_general_ci
-
+character-set-server    = utf8mb4
+collation-server        = utf8mb4_general_ci
 
 [embedded]
 

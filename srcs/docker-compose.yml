@@ -1,18 +1,43 @@
 version: '3.9'
 
 services:
+
   mariadb:
     container_name: mariadb
+    networks:
+      - inception
     build: 
       context: ./requirements/mariadb/
       dockerfile: Dockerfile
-    ports:
-      - "3306:3306"
     env_file: .env
     volumes:
       - db_data:/var/lib/mysql
     restart: unless-stopped
 
+  wordpress:
+    container_name: wordpress
+    networks:
+      - inception
+    build:
+      context: ./requirements/wordpress
+      dockerfile: Dockerfile
+    depends_on: 
+      - mariadb
+    env_file: .env
+    volumes:
+      - wp_data:/var/lib
+    restart: unless-stopped
+
 volumes:
+
   db_data:
     driver: local
+    name: db_data
+
+  wp_data:
+    driver: local
+    name: wp_data
+
+networks:
+  inception:
+    driver: bridge
