@@ -16,6 +16,6 @@
 *.md
 *.txt
 
-# Exclude secrets (just in case)
+# Exclude secrets
 secrets/
 *.env
