@@ -2,57 +2,63 @@ NAME = inception
 PATH_DOCKER_COMPOSE = srcs/docker-compose.yml
 
 all : down build run
+	@echo "Project ${NAME} is up and running!"
 
 run:
-	docker-compose -f ${PATH_DOCKER_COMPOSE} -p ${NAME} up
+	@echo "Starting ${NAME} in interactive mode..."
+	@docker-compose -f ${PATH_DOCKER_COMPOSE} -p ${NAME} up || echo "Containers stopped cleanly."
 
 run-daemon:
+	@echo "Starting ${NAME} in detached mode..."
 	docker-compose -f ${PATH_DOCKER_COMPOSE} -p ${NAME} up -d
 
 down:
+	@echo "Stopping and removing all containers for ${NAME}..."
 	docker-compose -f ${PATH_DOCKER_COMPOSE} -p ${NAME} down
 
 stop:
+	@echo "Stopping all containers for ${NAME} without removing them..."
 	docker-compose -f ${PATH_DOCKER_COMPOSE} -p ${NAME} stop
 
 build:
+	@echo "Building Docker images for ${NAME}..."
 	docker-compose -f ${PATH_DOCKER_COMPOSE} -p ${NAME} build
 
 clean: down
+	@echo "Cleaning up unused Docker resources..."
 	docker system prune -a
 
 fclean: down
+	@echo "Performing a full cleanup, including unused volumes..."
 	docker system prune -a --volumes
-	docker volume rm $$(docker volume ls -q)
-	rm -rf ~/data
 
 re: fclean all
+	@echo "Project ${NAME} has been rebuilt from scratch!"
 
-delete-volumes :
-	docker system prune -a --volumes
-	docker volume rm $$(docker volume ls -q)
 
-status :
+delete-volumes:
+	@echo "Deleting all unused Docker volumes..."
+	docker system prune -a --volumes -f
 
-	@echo "\033[44mRunning Containers :${RESET_COLOR}"
+status:
+	@echo "Checking the status of ${NAME} resources..."
+	@echo "Running Containers:"
 	@docker-compose -f ${PATH_DOCKER_COMPOSE} -p ${NAME} ps
 	@echo ""
 
-	@echo "\033[44mImages :${RESET_COLOR}"
+	@echo "Images:"
 	@docker images
 	@echo ""
 
-	@echo "\033[44mContainers :${RESET_COLOR}"
+	@echo "Containers:"
 	@docker container ls -a
 	@echo ""
 
-	@echo "\033[44mVolumes :${RESET_COLOR}"
+	@echo "Volumes:"
 	@docker volume ls
 	@echo ""
 
-	@echo "\033[44mNetwork :${RESET_COLOR}"
+	@echo "Network:"
 	@docker network ls
-	@echo ""
-
 
 .PHONY: all clean fclean re status stop run run-daemon down build prepare delete-volumes

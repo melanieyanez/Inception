@@ -6,14 +6,14 @@ echo "Checking PHP version..."
 php-fpm7.4 -v
 
 echo "Waiting for MariaDB to be ready..."
-while ! mysqladmin ping -h mariadb --silent; do
+while ! mariadb -u "$MARIADB_USER" --password="$MARIADB_PASSWORD" -h "$WP_HOST" -P 3306 --silent 2>/dev/null; do
     echo "MariaDB is not ready yet, retrying..."
-    sleep 1
+    sleep 2
 done
 echo "MariaDB is ready!"
 
 echo "Displaying existing databases as ${MARIADB_USER}..."
-mariadb -u $MARIADB_USER --password=$MARIADB_PASSWORD -h mariadb -P 3306 -e "SHOW DATABASES;" || {
+mariadb -u $MARIADB_USER --password=$MARIADB_PASSWORD -h "$WP_HOST" -P 3306 -e "SHOW DATABASES;" || {
     echo "Error: Unable to connect to MariaDB as ${MARIADB_USER}.";
     exit 1;
 }
