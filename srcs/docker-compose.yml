@@ -1,4 +1,4 @@
-version: '3.9'
+#version: '3.9'
 
 services:
 
@@ -9,7 +9,8 @@ services:
     build: 
       context: ./requirements/mariadb/
       dockerfile: Dockerfile
-    env_file: .env
+    env_file: 
+      - .env
     volumes:
       - db_data:/var/lib/mysql
     restart: unless-stopped
@@ -23,7 +24,8 @@ services:
       dockerfile: Dockerfile
     depends_on: 
       - mariadb
-    env_file: .env
+    env_file:
+      - .env
     volumes:
       - wp_data:/var/www/wordpress
     restart: unless-stopped
@@ -37,7 +39,8 @@ services:
       dockerfile: Dockerfile
     depends_on: 
       - wordpress
-    env_file: .env
+    env_file: 
+      - .env
     ports:
       - "443:443"
     volumes:

@@ -5,17 +5,18 @@ echo "------------------------------- WORDPRESS START --------------------------
 echo "Checking PHP version..."
 php-fpm7.4 -v
 
-echo "Checking MariaDB availability..."
-while ! mariadb -u $MARIADB_USER --password=$MARIADB_PASSWORD -h mariadb -P 3306 --silent; do
+echo "Waiting for MariaDB to be ready..."
+while ! mysqladmin ping -h mariadb --silent; do
     echo "MariaDB is not ready yet, retrying..."
     sleep 1
 done
 echo "MariaDB is ready!"
 
-echo "Displaying existing databases..."
-echo "------------------"
-mariadb -u $MARIADB_USER --password=$MARIADB_PASSWORD -h mariadb -P 3306 -e "SHOW DATABASES;"
-echo "------------------"
+echo "Displaying existing databases as ${MARIADB_USER}..."
+mariadb -u $MARIADB_USER --password=$MARIADB_PASSWORD -h mariadb -P 3306 -e "SHOW DATABASES;" || {
+    echo "Error: Unable to connect to MariaDB as ${MARIADB_USER}.";
+    exit 1;
+}
 
 echo "Checking if WordPress is already installed..."
 if [ -e /var/www/wordpress/wp-config.php ]; then

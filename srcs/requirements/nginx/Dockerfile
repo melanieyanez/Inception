@@ -5,7 +5,7 @@ RUN apt-get install -y nginx
 
 RUN mkdir -p /etc/nginx/ssl
 RUN apt install -y openssl
-RUN openssl req -x509 -nodes -out /etc/nginx/ssl/inception.crt -keyout /etc/nginx/ssl/inception.key -subj "/C=SW/ST=VS/L=Lausane/O=42/OU=42/CN=francois-xavier.42.ch/emailAddress=francois-xavier@student.42.fr"
+RUN openssl req -x509 -nodes -out /etc/nginx/ssl/inception.crt -keyout /etc/nginx/ssl/inception.key -subj "/C=CH/ST=VD/L=Lausanne/O=42/OU=42/CN=myanez-p.42.fr/emailAddress=myanez-p@student.42lausanne.ch"
 
 RUN mkdir -p /var/run/nginx
 RUN mkdir -p /var/www/wordpress
