@@ -1,8 +1,24 @@
 NAME = inception
 PATH_DOCKER_COMPOSE = srcs/docker-compose.yml
+PATH_DB_DATA = /Users/melanieyanez/Desktop/data/mariadb
+PATH_WP_DATA = /Users/melanieyanez/Desktop/data/wordpress
+PATH_ENV_FILE = /Users/melanieyanez/Desktop/.env
+#PATH_DB_DATA = /home/myanez-p/data/mariadb
+#PATH_WP_DATA = /home/myanez-p/data/wordpress
+#PATH_ENV_FILE = /home/myanez-p/.env
 
-all : down build run
-	@echo "Project ${NAME} is up and running!"
+all : prepare down build run
+
+prepare:
+	if [ ! -d srcs/.env ]; then \
+		cp ${PATH_ENV_FILE} srcs/.env; \
+	fi
+	if [ ! -d ${PATH_WP_DATA} ]; then \
+		mkdir -p ${PATH_WP_DATA}; \
+	fi
+	if [ ! -d ${PATH_DB_DATA} ]; then \
+		mkdir -p ${PATH_DB_DATA}; \
+	fi
 
 run:
 	@echo "Starting ${NAME} in interactive mode..."
@@ -33,8 +49,6 @@ fclean: down
 	docker system prune -a --volumes
 
 re: fclean all
-	@echo "Project ${NAME} has been rebuilt from scratch!"
-
 
 delete-volumes:
 	@echo "Deleting all unused Docker volumes..."

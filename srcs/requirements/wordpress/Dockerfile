@@ -15,7 +15,6 @@ RUN chown -R www-data:www-data /var/www/wordpress/wp-content/uploads
 RUN chmod -R 755 /var/www/wordpress/wp-content/uploads
 
 COPY conf/www.conf /etc/php/7.4/fpm/pool.d/www.conf
-
 COPY tools/init_wp.sh /usr/local/init_wp.sh
 RUN chmod +x /usr/local/init_wp.sh
 
