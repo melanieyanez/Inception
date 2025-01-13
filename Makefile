@@ -42,11 +42,11 @@ build:
 
 clean: down
 	@echo "Cleaning up unused Docker resources..."
-	docker system prune -a
+	docker system prune -a -f
 
 fclean: down
 	@echo "Performing a full cleanup, including unused volumes..."
-	docker system prune -a --volumes
+	docker system prune -a --volumes -f
 
 re: fclean all
 
