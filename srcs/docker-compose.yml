@@ -43,7 +43,6 @@ services:
       - .env
     ports:
       - "443:443"
-      - "80:80"
     volumes:
       - wp_data:/var/www/wordpress
     restart: unless-stopped
